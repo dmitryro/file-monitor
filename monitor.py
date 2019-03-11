@@ -21,6 +21,9 @@ def file_size(file_path):
 
 
 def main(dir_to_watch):
+    """
+    Use inotify to watch the provided directory for changes
+    """
     i = inotify.adapters.Inotify()
 
     i.add_watch(dir_to_watch)
@@ -29,16 +32,21 @@ def main(dir_to_watch):
     events = list(events)
     if events:
         try:
+            # Read the file event tuple
             event = events[1][1]
             dir_accessed = events[1][2]
             file_accessed = events[1]
             file_abs_path = "{}/{}".format(dir_accessed, file_accessed[3])
             f_size = file_size(file_abs_path)
-            print(f"{event[0][3:]} -- {file_abs_path}  -- {f_size}")
+            f_event = event[0][3:]
+            print("{} -- {} -- {}".format(f_event, f_abs_path, f_size))
         except Exception as ex:
             pass
 
 if __name__ == '__main__':
-    file_abs_path = sys.argv[0]
-    while(1):
-        main(dir_to_watch)
+    try:
+       dir_to_watch = sys.argv[1]
+       while(1):
+           main(dir_to_watch)
+    except Exception as e:
+       print("Error watching ...invalid command line argument")
