@@ -2,8 +2,18 @@
 
 Use inotify to monitor directory.
 
-* requires inotify. To install
 
+### Requires inotify
+
+```bash
 pip install inotify
+```
+
+### To run
+
+
+```bash
+python monitor.py /your_dir
+```
 
 
